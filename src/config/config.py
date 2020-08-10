@@ -4,11 +4,12 @@ import json
 from pathlib import Path
 
 class Config(object):
+# CRUD App like config manager
   def __init__(self, config_path):
     self.config_path = config_path
-    self.config_file = self.LoadConfig()
+    self.config_file = self.loadConfig()
 
-  def LoadConfig(self):
+  def loadConfig(self):
     try:
       with open(self.config_path) as f:
         config_file = json.loads(f.read())
@@ -16,7 +17,7 @@ class Config(object):
     except FileNotFoundError:
       print("File Does Not Exist, Assuming you will be using GenerateConfig")
    
-  def GenerateConfig(self, ConnectionServer="localhost", ConnectionPort=5000, AllowOnionIp=False):
+  def generateConfig(self, ConnectionServer="localhost", ConnectionPort=5000, AllowOnionIp=False):
     Path(self.config_path).touch()
     configSettings = {
       'connection_server': f'{ConnectionServer}',
@@ -27,5 +28,17 @@ class Config(object):
       configJson = json.dump(configSettings, fp)
       fp.close()
 
- #TODO: Finish Config Module
+  def readVariable(self, config_variable):
+    config_json = json.loads(self.config_file)
+    return config_json[config_variable]
+
+  def changeVariable(self, config_variable, new_value):
+    config_json = json.loads(self.config_file)
+    config_json[config_variable] = new_value
+    return config_json
+
+  def deleteVariable(self, config_variable):
+    config_json = json.loads(self.config_file)
+    config_json.pop(config_variable)
+    return config_json
 
