@@ -35,10 +35,12 @@ class Config(object):
   def changeVariable(self, config_variable, new_value):
     config_json = json.loads(self.config_file)
     config_json[config_variable] = new_value
+    json.dumps(config_json, self.config_path)
     return config_json
 
   def deleteVariable(self, config_variable):
     config_json = json.loads(self.config_file)
     config_json.pop(config_variable)
+    json.dumps(config_json, self.config_path)
     return config_json
 
